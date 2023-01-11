@@ -1,73 +1,103 @@
 /*-------------------------------- Constants --------------------------------*/
 
-
-
 /*-------------------------------- Variables --------------------------------*/
 
-let secretNum, guessList, isWinner //their type will change late so we use let. thats why we cannot use const and why they have not been declared
+let secretNum, guessList, isWinner
 
 /*------------------------ Cached Element References ------------------------*/
 
-const form = document.querySelector('form')
-const guessInput = document.querySelector('#guess-input')
-const guessesEl = document.querySelector('#prev-guesses')
-const messageEl = document.querySelector('#message')
-const resetButton = document.querySelector('#reset-button')
-const prevGuessesMsg = document.querySelector('#prev-guesses-msg')
+const form = document.querySelector("form")
+const guessInput = document.querySelector("#guess-input")
+const guessesEl = document.querySelector("#prev-guesses")
+const messageEl = document.querySelector("#message")
+const resetBtn = document.querySelector("#reset-button")
+const prevGuessMsg = document.querySelector("#prev-guesses-msg")
 
-console.log(form, guessInput, guessesEl, messageEl, resetButton, prevGuessesMsg)
 /*----------------------------- Event Listeners -----------------------------*/
-form.addEventListener('reset', init)
 
-form.addEventListener('submit', function(event) {
-  event.preventDefault()
-  if (!isWinner) {
+form.addEventListener("reset", init)
+
+form.addEventListener("submit", function (evt) {
+  evt.preventDefault()
+  if (isWinner === false) {
     checkGuess(parseInt(guessInput.value))
   }
-}) 
-
+})
 
 /*-------------------------------- Functions --------------------------------*/
 
-init ()
+init()
 
-function init(){
-guessesEl.innerHTML = ''
-messageEl.textContent = 'Please enter a guess between and 100!'
-resetButton.setAttribute('hidden', true)
-prevGuessesMsg.textContent = ''
-guessList = []
-isWinner = false
-secretNum = Math.floor(Math.random() * 100 + 1)
-console.log(secretNum) 
-}
-// console.log(secretNum) - just a sanity check to see if random number is being picked 
-
-function checkGuess(guess) {
-  // clear out the input for better UX
-  guessInput.value = ''
-  // Evaluate whether guess is valid   
-    // is it within range?
-   // is it a number?
-  if (isNaN(guess) || guess < 1 || guess > 100) {
-    renderError ('Whoops! Please enter a number between 1 and 100.')
-    return
-    // Check if we have a winner
-  } else if (guess === secretNum) {
-    isWinner = true
-  }
-  // add guess to guess list if non of the above conditions are met
-  guessList.push(guess)
-  //render
+function init() {
+  messageEl.className = ""
+  guessesEl.textContent = ""
+  messageEl.textContent = "Please enter a number from 1 to 100"
+  resetBtn.setAttribute("hidden", true)
+  prevGuessMsg.textContent = ""
+  guessList = []
+  isWinner = false
+  secretNum = Math.floor(Math.random() * 100 + 1)
   render()
 }
 
-
-function renderError(){
-console.log('renderError invoked')
-console.log(guessList)
+function checkGuess(guess) {
+  guessInput.value = ""
+  if (isNaN(guess) || guess < 1 || guess > 100) {
+    renderError("Whoops! Please enter a number from 1 to 100.")
+    return
+  } else if (guess === secretNum) {
+    isWinner = true
+  }
+  guessList.push(guess)
+  render()
 }
 
-function render(){
-  console.log('render invoked')
+function render() {
+  const lastGuess = guessList[guessList.length - 1]
+  const div = document.createElement("div")
+  div.textContent = lastGuess
+
+  if (guessList.length === 1) {
+    prevGuessMsg.textContent = "Previous Guesses:"
+    resetBtn.removeAttribute("hidden")
+  }
+
+  if (isWinner) {
+    renderWin(div)
+  } else if (lastGuess > secretNum || lastGuess < secretNum) {
+    renderGuess(div, lastGuess)
+  }
 }
+
+function renderWin(div) {
+  messageEl.className = "winner"
+  div.className = "winner"
+  guessesEl.appendChild(div)
+  if (guessList.length === 1) {
+    messageEl.textContent = `You found the number in one guess!`
+  } else {
+    messageEl.textContent = `Congratulations! You found the number ${secretNum} in ${guessList.length} guesses!`
+  }
+}
+
+function renderGuess(div, lastGuess) {
+  if (lastGuess < secretNum) {
+    messageEl.className = "low"
+    div.className = "low"
+    messageEl.textContent = `${lastGuess} is too low, please try again!`
+  } else if (lastGuess > secretNum) {
+    messageEl.className = "high"
+    div.className = "high"
+    messageEl.textContent = `${lastGuess} is too high, please try again!`
+  }
+  guessesEl.appendChild(div)
+}
+
+function renderError(error) {
+  messageEl.className = "error"
+  messageEl.textContent = error
+}
+
+// option shift down - to make a copy of something 
+// if u hold option, u can move the copy wherever u want
+// 

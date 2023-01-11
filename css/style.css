@@ -12,17 +12,33 @@ form {
   margin-top: 24px;
 }
 
-#prev-guesses-msg {
+#prevGuessesMsg {
   font-size: 24px;
   margin-top: 24px;
 }
 
-#prev-guesses {
+#prevGuesses {
   font-size: 20px;
   margin-top: 16px;
 }
 
-#guess-button,
-#reset-button {
+#guessButton,
+#resetButton {
   margin-left: 24px;
+}
+
+.high {
+  color: #ffb04b;
+}
+
+.low {
+  color:#00a7f7;
+}
+
+.winner {
+  color: #98d174;
+}
+
+.error {
+  color: #f13814;
 }
