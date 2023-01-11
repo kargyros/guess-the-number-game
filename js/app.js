@@ -17,8 +17,20 @@ const prevGuessesMsg = document.querySelector('#prev-guesses-msg')
 
 console.log(form, guessInput, guessesEl, messageEl, resetButton, prevGuessesMsg)
 /*----------------------------- Event Listeners -----------------------------*/
-
+form.addEventListener('reset', init)
 
 
 /*-------------------------------- Functions --------------------------------*/
 
+init ()
+
+function init(){
+guessesEl.innerHTML = ''
+messageEl.textContent = 'Please enter a guess between and 100!'
+resetButton.setAttribute('hidden', true)
+prevGuessesMsg.textContent = ''
+guessList = []
+isWinner = false
+secretNum = Math.floor(Math.random() * 100 + 1)
+// console.log(secretNum) - just a sanity check to see if random number is being picked 
+}
